@@ -81,8 +81,15 @@ public:
 	class UJE_NicknameComponent* nickComp;*/
 
 	// 닉네임 textrender
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Nickname")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, Category="Nickname")
 	class UTextRenderComponent* nicknameText;
+
+	// 닉네임 setText 함수
+	UFUNCTION(Server, Reliable)
+	void ServerSetNickName();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSetNickName();
 
 	
 };

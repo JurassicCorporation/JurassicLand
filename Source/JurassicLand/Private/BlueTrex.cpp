@@ -17,6 +17,9 @@
 #include "JE_NicknameComponent.h"
 #include "LSH_NetGameInstance.h"
 #include "Components/TextRenderComponent.h"
+#include "Net/UnrealNetwork.h"	// 언리얼 네트워크 기능 사용을 위한 헤더
+#include "JE_PlayerState.h"
+
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE(TRexTailAttack);
 
@@ -77,11 +80,12 @@ ABlueTrex::ABlueTrex()
 	//nickComp = CreateDefaultSubobject<UJE_NicknameComponent>(TEXT("nickComp"));
 	nicknameText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("nicknameTEXT"));
 	nicknameText->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), "NeckSocket");
-	nicknameText->SetRelativeLocation(FVector(0, -350, 0));
-	nicknameText->SetRelativeRotation(FRotator(0, 0, 90));
+	nicknameText->SetRelativeLocation(FVector(0, 350, 500));
+	nicknameText->SetRelativeRotation(FRotator(0, 270, 0));
 	nicknameText->SetHorizontalAlignment(EHTA_Center);
 	nicknameText->SetWorldSize(100);
 	nicknameText->SetTextRenderColor(FColor::White);
+	nicknameText->SetVisibility(true);
 	
 }
 
@@ -97,11 +101,18 @@ void ABlueTrex::BeginPlay()
 			SubSystem->AddMappingContext(IMC_TRex, 0);
 	}
 
-	// 닉네임
-	ULSH_NetGameInstance* gi = GetGameInstance<ULSH_NetGameInstance>();
-	nicknameText->SetText(FText::FromString(gi->myName));
 
-	
+	// 닉네임
+
+	AJE_PlayerState* playerState = GetPlayerState<AJE_PlayerState>();
+
+	if (playerState)
+	{
+		//nicknameText->SetText(FText::FromString(playerState->PlayerName));
+		ServerSetNickName();
+
+	}
+
 
 	
 }
@@ -168,6 +179,27 @@ void ABlueTrex::TRexTailAttack_Implementation(const FInputActionValue& Val)
 		this->bUseControllerRotationYaw = false;
 		
 	}
+}
+
+void ABlueTrex::ServerSetNickName_Implementation()
+{
+	MulticastSetNickName();
+}
+
+void ABlueTrex::MulticastSetNickName_Implementation()
+{
+	AJE_PlayerState* playerState = GetPlayerState<AJE_PlayerState>();
+	nicknameText->SetText(FText::FromString(playerState->PlayerName));
+	GEngine->AddOnScreenDebugMessage(-1, 30.0f, FColor::Yellow, playerState->PlayerName);
+
+
+}
+
+void ABlueTrex::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABlueTrex, nicknameText);
 }
 
 

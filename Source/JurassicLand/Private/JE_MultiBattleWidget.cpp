@@ -18,7 +18,7 @@ void UJE_MultiBattleWidget::NativeConstruct()
 
 	gi = GetGameInstance<ULSH_NetGameInstance>();
 
-	GEngine->AddOnScreenDebugMessage(-1, 30.0f, FColor::Green, gi->myName);
+	//GEngine->AddOnScreenDebugMessage(-1, 30.0f, FColor::Green, gi->myName);
 
 	btn_ready->OnClicked.AddDynamic(this, &UJE_MultiBattleWidget::OnClickedReady);
 

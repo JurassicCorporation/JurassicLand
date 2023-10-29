@@ -31,6 +31,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category=MySettings)
 	bool bBattleIn = false;
 
+	class ABlueTrex* player;
+
+	class ULSH_NetGameInstance* gi;
 
 
 };

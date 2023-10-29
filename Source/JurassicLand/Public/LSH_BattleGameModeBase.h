@@ -13,5 +13,5 @@ UCLASS()
 class JURASSICLAND_API ALSH_BattleGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
 };

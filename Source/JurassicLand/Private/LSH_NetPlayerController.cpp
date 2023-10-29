@@ -4,12 +4,16 @@
 #include "LSH_NetPlayerController.h"
 #include "Components/WidgetComponent.h"
 #include "JE_NicknameWidget.h"
+#include "BlueTrex.h"
+#include "Components/TextRenderComponent.h"
+#include "JE_PlayerState.h"
+#include "LSH_NetGameInstance.h"
+
 
 ALSH_NetPlayerController::ALSH_NetPlayerController()
 {
 	//PrimaryActorTick.bCanEverTick = true;
 
-	//APawn* player = GetPawn();
 
 	//if (player)
 	//{
@@ -28,6 +32,31 @@ void ALSH_NetPlayerController::BeginPlay()
 {
     Super::BeginPlay();
 
+	gi = Cast<ULSH_NetGameInstance>(GetGameInstance());
+	player = Cast<ABlueTrex>(GetPawn());
+
+
+	AJE_PlayerState* playerState = GetPlayerState<AJE_PlayerState>();
+	//AJE_PlayerState* playerState = Cast<AJE_PlayerState>(player->GetPlayerState());
+	if (playerState != nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 30.0f, FColor::Green, gi->myName);
+		if (player != nullptr)		{
+			
+			//player->playerState->SetPlayerName(gi->myName);
+			playerState->SetPlayerName(gi->myName);
+			GEngine->AddOnScreenDebugMessage(-1, 30.0f, FColor::Green, playerState->PlayerName);
+			player->ServerSetNickName();
+		}
+		
+	}
+
+
+	/*if (player != nullptr)
+	{
+		player->nicknameText->SetVisibility(true);
+
+	}*/
 
 	/*if (nickNameComp != nullptr)
 	{
