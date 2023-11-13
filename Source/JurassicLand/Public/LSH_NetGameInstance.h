@@ -58,7 +58,7 @@ public:
 	int32 BuffskillNum = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Skill")
-	int32 SpecialskillNum = 2;
+	int32 SpecialskillNum = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Skill")
 	class UTexture2D* playerSpecialSkillImg = nullptr;
