@@ -67,14 +67,14 @@ public:
 
 	
 	//State_HP(Damage System Value)
-	//HPµ¿±âÈ­
+	//HPï¿½ï¿½ï¿½ï¿½È­
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = CharacterStat, BlueprintReadWrite)
 	float State_HP = 50; 
 	
-	//HP º¯¼ö µ¿±âÈ­ À§ÇÑ ÇÔ¼ö
+	//HP ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
-	//noDamageTime(°ø°Ý ¸Â°í³ª¼­ ¸îÃÊ°£ ¹«Àû)
+	//noDamageTime(ï¿½ï¿½ï¿½ï¿½ ï¿½Â°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ê°ï¿½ ï¿½ï¿½ï¿½ï¿½)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CharacterStat)
 	bool noDamageTime = false;
 
@@ -127,7 +127,7 @@ public:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Skill")
 	float SpecialCool = 5.0f;
 
-	// ½ºÅ³ »ç¿ëÇÏ´Â Å°¿¡ µû¸¥ ÄðÅ¸ÀÓ ÀÎµ¦½º
+	// ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
 	int32 coolTimeIndex = -1;
 
@@ -192,6 +192,7 @@ public:
 	  /*----- General Value ----------*/
 public:
 	class APlayerController* pc;
+	class ALSH_NetPlayerController* lsh_pc;
 	class UCharacterMovementComponent* CharacterMovement;
 
 	  /*---------- Enhanced Input ---------------*/
@@ -208,8 +209,8 @@ public:
 	  TArray<class UInputAction*> inputActions;
 
  	  public:
- 	// hp - ÁöÀº
- 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "StateWidget")//HPµ¿±âÈ­
+ 	// hp - ï¿½ï¿½ï¿½ï¿½
+ 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "StateWidget")//HPï¿½ï¿½ï¿½ï¿½È­
  	bool bIsHpZero = false;	
  
  	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "StateWidget")
@@ -217,48 +218,48 @@ public:
  
  	bool btickStop = false;
 
-	/*---------------------------- ÁöÀº ----------------------------*/
-// ÇÃ·¹ÀÌ¾î Á¤º¸ : ´Ð³×ÀÓ, ¸Þ½¬, ÄÃ·¯
+	/*---------------------------- ï¿½ï¿½ï¿½ï¿½ ----------------------------*/
+// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ : ï¿½Ð³ï¿½ï¿½ï¿½, ï¿½Þ½ï¿½, ï¿½Ã·ï¿½
 public:
 
 	class ULSH_NetGameInstance* gi;
 	
-	// ´Ð³×ÀÓ º¯¼ö
+	// ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = Custom)
 	FString playerName = "BlueTrex";
 
-	// »ö º¯¼ö
+	// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = Custom)
 	FLinearColor playerColor = FLinearColor::White;
 
-	// ¸Þ½¬ º¯¼ö
+	// ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = Custom)
 	int32 playerMeshNumber = 0;
 
-// ÇÃ·¹ÀÌ¾î Á¤º¸ : ¸ðÀÚ, ¾È°æ, ½Å¹ß
+// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½, ï¿½È°ï¿½, ï¿½Å¹ï¿½
 public:
-	// ¸ðÀÚ º¯¼ö
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = Custom)
 	FName playerHat;
 
-	// ¾È°æ º¯¼ö
+	// ï¿½È°ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = Custom)
 	FName playerGlasses;
 
-	// ½Å¹ß º¯¼ö  
+	// ï¿½Å¹ï¿½ ï¿½ï¿½ï¿½ï¿½  
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = Custom)
 	FName playerShoes;
 
 	public:
-	// ´Ð³×ÀÓ ui component
+	// ï¿½Ð³ï¿½ï¿½ï¿½ ui component
 	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UJE_NicknameComponent* nickComp;*/
 
-// ´Ð³×ÀÓ textrendercomponent
+// ï¿½Ð³ï¿½ï¿½ï¿½ textrendercomponent
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Nickname")
 	class UTextRenderComponent* nicknameText;
 
-//ÄÚÀÎ
+//ï¿½ï¿½ï¿½ï¿½
 public:
 	
 	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category=coin)
@@ -267,7 +268,7 @@ public:
 	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category=coin)
 	float currentCoin = 0.0f;
 
-//ÄÃ·¯ Ä¿½ºÅÒ
+//ï¿½Ã·ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½
 public:
 	class UMaterialInterface* CustomMat;
 	class UMaterialInterface* InitialMat;
@@ -281,42 +282,42 @@ public:
 	bool IsColorCustom = false;
 
 public:
-	//Ä¿½ºÅÒ ¾ÆÀÌÅÛ, Ä¿½ºÅÒ ÄÃ·¯ ¹× ÇÃ·¹ÀÌ¾î Á¤º¸ ½ÇÇà ÇÔ¼ö
+	//Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	UFUNCTION()
 	void InitializePlayer();
 
-	// Ä¿½ºÅÒ ÄÃ·¯ ÇÃ·¹ÀÌ¾î Á¤º¸ ¼³Á¤ ÇÔ¼ö(¸ÖÆ¼Ä³½ºÆ®)
+	// Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½(ï¿½ï¿½Æ¼Ä³ï¿½ï¿½Æ®)
 	UFUNCTION(BlueprintCallable)
 	void SetColor();
 
-	// Ä¿½ºÅÒ ÄÃ·¯ ÃÊ±â ¼³Á¤
+	// Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UFUNCTION()
 	void CustomColor();
 
-	// Ä¿½ºÅÒ ¾ÆÀÌÅÛ ¼³Á¤ ÇÔ¼ö, ºí·çÇÁ¸°Æ®¿¡ Á¤ÀÇ
+	// Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void InitialCustomMulti();
 
-	// ÇÃ·¹ÀÌ¾î Á¤º¸ ¼³Á¤ ÇÔ¼ö
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	UFUNCTION(Server, Reliable)
 	void ServerSetInitInfo(FPlayerCustomInfo initInfo);
 
-	// ÇÃ·¹ÀÌ¾î Ä¿½ºÅÒ ¾ÆÀÌÅÛ ¼³Á¤ ÇÔ¼ö
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	UFUNCTION(Server, Reliable)
 	void ServerSetCustomItemInfo(FPlayerCustomItemInfo customItemInfo);
 
-	// ÀúÀå
+	// ï¿½ï¿½ï¿½ï¿½
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomData")
 	class UJE_SaveGame* MySaveGame;
 
-	// Ä¿½ºÅÒ ¾ÆÀÌÅÛ µ¥ÀÌÅÍ Å×ÀÌºí Á¤º¸
+	// Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½
 	FJE_CustomItemData* playerCustomData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="CustomData")
 	UDataTable* PlayerCustomTable;
 
-	// Ä¿½ºÅÒ ¾ÆÀÌÅÛ ÀúÀå º¯¼öµé
+	// Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomData")
 	class AJE_CustomItemActor* currentHat;
 
@@ -329,7 +330,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomData")
 	class UMaterialInstanceDynamic* currentDynamicMat;
 
-	// Ä¿½ºÅÒ ¾×ÅÍÀÇ ÅÂ±× ÀúÀå º¯¼ö
+	// Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "CustomData")
 	FName HatTag;
 
@@ -349,34 +350,33 @@ public:
 	UFUNCTION()
 	void LoadCustomItemData();
 
-// ¸Þ½¬ Ä¿½ºÅÒ
+// ï¿½Þ½ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½
 public:
 
-	// ¸Þ½¬ °æ·Î ÀúÀåÇÑ ¹è¿­
+	// ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
 	TArray<FString> meshPathList = { TEXT("/Script/Engine.SkeletalMesh'/Game/4_SK/BlueTRex/SK_TRex.SK_TRex'"),
 									TEXT("/Script/Engine.SkeletalMesh'/Game/4_SK/Raptor/Model/Raptor_HumanIK.Raptor_HumanIK'"),
 									TEXT("/Script/Engine.SkeletalMesh'/Game/4_SK/Dinosaurus_Stegosaurus/Models/SK_Stegosaurus.SK_Stegosaurus'"),
 									TEXT("/Script/Engine.SkeletalMesh'/Game/4_SK/Triceratops/Meshes/SK_Triceratops.SK_Triceratops'"), };
 	
-	// ¸Þ½¬¿¡ ¸Â´Â material
+	// ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½Â´ï¿½ material
 	TArray<FString> matPathList = { TEXT("/Script/Engine.Material'/Game/4_SK/BlueTRex/MAT_TRex.MAT_TRex'"),
 									TEXT("/Script/Engine.Material'/Game/4_SK/Raptor/Model/DromaMESH_DromaBodyM.DromaMESH_DromaBodyM'"),
 									TEXT("/Script/Engine.Material'/Game/4_SK/Dinosaurus_Stegosaurus/Models/Materials/M_Stegosaurus_Green.M_Stegosaurus_Green'"),
 									TEXT("/Script/Engine.SkeletalMesh'/Game/4_SK/Triceratops/Meshes/SK_Triceratops.SK_Triceratops'"), };
 
 
-	// ¸Þ½¬ º¯°æ ÇÔ¼ö
+	// ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	UFUNCTION()
 	void SetMesh();
 
-	// ¸Þ½¬ ÃÊ±â ¼³Á¤
+	// ï¿½Þ½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UFUNCTION()
 	void CustomMesh();
 	/*------- LockOnSystem -----------*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LockOnSystem)
 	class AActor* LockOnTarget;
 
-	// ½ºÅ³ ÇÁ¸®¼Â
 public:
 	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadWrite, Category = "Skill")
 	bool IsSetPreset = false;
@@ -392,4 +392,10 @@ public:
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Skill")
 	class UTexture2D* currplayerBuffSkillImg;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+	TSubclassOf<class UJE_BattleWidget> battlewidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+ 	class UJE_BattleWidget* battleUI;
 };

@@ -20,7 +20,10 @@ protected:
 
 public:
 	class ULSH_NetGameInstance* gi;
-	class ABlueTrex* player;
+	class ABlueTrex* TrexPlayer;
+	class ARaptor* RaptorPlayer;
+	class ABasePlayer* basePlayer;
+	//class ACharacter* player;
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget), Category = MySettings)
 	class UButton* btn_fire;

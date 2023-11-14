@@ -28,6 +28,7 @@
 #include "JE_CustomPlayerController.h"
 #include "JE_InBattleController.h"
 #include "JE_BattleWidget.h"
+#include "Raptor.h"
 
 
 
@@ -135,7 +136,6 @@ void ABlueTrex::BeginPlay()
 		if (UEnhancedInputLocalPlayerSubsystem* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(pc->GetLocalPlayer()))
 			SubSystem->AddMappingContext(IMC_TRex, 0);
 	}
-
 	
 	// ´Ð³×ÀÓ	
 	gi = GetGameInstance<ULSH_NetGameInstance>();
@@ -262,10 +262,13 @@ void ABlueTrex::InitializePlayer()
 	//{
 	//	nicknameText->SetText(FText::FromString(playerName));
 	//}
+	if (gi->playerCustomInfo.dinoMeshNum != 1)
+	{
+		InitialCustomMulti();
 
-	InitialCustomMulti();
-
-	CustomColor();
+		CustomColor();
+	}
+	
 
 	//ServerSetSkills(gi->playerSkillInfo);
 

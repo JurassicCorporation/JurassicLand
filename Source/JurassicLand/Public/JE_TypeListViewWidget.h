@@ -21,7 +21,12 @@ protected:
 public:
 
 	class ULSH_NetGameInstance* gi;
+
 	class ABlueTrex* player;
+	class ARaptor* raptorplayer;
+	class ABasePlayer* baseplayer;
+
+	class AJE_SkillModeBase* skillmode;
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget), Category = MySettings)
 	class UButton* btn_type;
@@ -34,6 +39,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget), Category = MySettings)
 	class UButton* btn_type_3;
+
+public:
+	// 캐릭터 스폰 위치 액터
+	class AJE_CharacterSpawActor* spawnLocActor;
+
 
 public:
 	UFUNCTION()

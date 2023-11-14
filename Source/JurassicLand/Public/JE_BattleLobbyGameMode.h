@@ -13,5 +13,14 @@ UCLASS()
 class JURASSICLAND_API AJE_BattleLobbyGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
+	AJE_BattleLobbyGameMode();
+
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	class ULSH_NetGameInstance* gi;
 	
 };

@@ -8,6 +8,9 @@
 #include "Components/Image.h"
 #include "Styling/SlateBrush.h"
 #include "Kismet/GameplayStatics.h"
+#include "JE_SkillModeBase.h"
+#include "Raptor.h"
+#include "BasePlayer.h"
 
 
 
@@ -16,7 +19,12 @@ void UJE_SkillWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	gi = GetGameInstance<ULSH_NetGameInstance>();
-	player = GetOwningPlayerPawn<ABlueTrex>();
+
+	TrexPlayer = GetOwningPlayerPawn<ABlueTrex>();
+
+	RaptorPlayer = GetOwningPlayerPawn<ARaptor>();
+	if(RaptorPlayer) basePlayer = RaptorPlayer;
+	//BasePlayer = GetOwningPlayerPawn<ABasePlayer>();
 
 	presetArray.Add(img_preset1);
 	presetArray.Add(img_preset2);
@@ -103,7 +111,8 @@ void UJE_SkillWidget::OnClickedAttackUP()
 
 void UJE_SkillWidget::SetBuffPreset()
 {
-	player->IsSetPreset = true;
+	if(TrexPlayer) TrexPlayer->IsSetPreset = true;
+	else basePlayer->IsSetPreset = true;
 
 	int i = 0;
 
@@ -136,7 +145,8 @@ void UJE_SkillWidget::SetBuffPreset()
 
 void UJE_SkillWidget::SetSpecialPreset()
 {
-	player->IsSetPreset = true;
+	if (TrexPlayer) TrexPlayer->IsSetPreset = true;
+	else basePlayer->IsSetPreset = true;
 	int i = 1;
 
 	presetImgArray[i] = Cast<UTexture2D>(presetArray[i]->GetBrush().GetResourceObject());
@@ -291,9 +301,18 @@ void UJE_SkillWidget::OnClickedSavePreset()
 		}
 
 	}
-
-	player->ServerSetSkills(gi->playerSkillInfo);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("%d"), player->currBuffskillNum));
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("%d"), player->currSpecialskillNum));
+	if (TrexPlayer)
+	{
+		TrexPlayer->ServerSetSkills(gi->playerSkillInfo);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("%d"), TrexPlayer->currBuffskillNum));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("%d"), TrexPlayer->currSpecialskillNum));
+	}
+	else
+	{
+		TrexPlayer->ServerSetSkills(gi->playerSkillInfo);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("%d"), TrexPlayer->currBuffskillNum));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("%d"), TrexPlayer->currSpecialskillNum));
+	}
+	
 	//player->IsSetPreset = false;
 }

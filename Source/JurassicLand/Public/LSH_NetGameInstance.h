@@ -95,6 +95,18 @@ public:
 	FPlayerSkillInfo playerSkillInfo;
 	bool IsColorChanged = false;
 
+public:	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = MySettings)
+	TSubclassOf<class ARaptor> raptor;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = MySettings)
+	TSubclassOf<class ABlueTrex> bluetrex;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = MySettings)
+	class ARaptor* dinoraptor;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = MySettings)
+	class ABlueTrex* dinotrex;
+
 	/*UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="CustomData")
 	FName HatTagInstance;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="CustomData")

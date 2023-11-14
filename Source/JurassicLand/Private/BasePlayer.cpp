@@ -30,6 +30,7 @@
 #include "Blueprint/UserWidget.h"
 #include "MoveComp.h"
 #include "Raptor.h"
+#include "LSH_NetPlayerController.h"
 
 // Sets default values
 ABasePlayer::ABasePlayer()
@@ -91,8 +92,9 @@ ABasePlayer::ABasePlayer()
 	}
 
 	MoveComp = CreateDefaultSubobject<UMoveComp>(TEXT("MoveComp"));
-
 	
+
+	//pc = Cast<APlayerController>(GetController());
 }
 
 // Called when the game starts or when spawned
@@ -100,8 +102,11 @@ void ABasePlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Enhanced Input
-	pc = Cast<APlayerController>(GetController());
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("%s"), *MoveComp->GetOwner()->GetName()));	
+
+	pc = Cast<APlayerCoatroller>(GetController());
+
+
 	if (pc != nullptr)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(pc->GetLocalPlayer()))
@@ -154,6 +159,7 @@ void ABasePlayer::Tick(float DeltaTime)
 void ABasePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		MoveComp->SetupPlayerEnhancedInputComponent(EnhancedInputComponent, inputActions);
@@ -201,10 +207,13 @@ void ABasePlayer::InitializePlayer()
 	{
 		nicknameText->SetText(FText::FromString(playerName));
 	}*/
+	if (gi->playerCustomInfo.dinoMeshNum == 1)
+	{
+		InitialCustomMulti();
 
-	InitialCustomMulti();
+		CustomColor();
+	}
 
-	CustomColor();
 }
 
 void ABasePlayer::SetColor()
@@ -395,8 +404,6 @@ void ABasePlayer::CustomColor()
 		GetMesh()->SetMaterial(0, dynamicMat1);
 
 	}
-
-
 	dynamicMat1->SetVectorParameterValue(FName("MyColor"), playerColor);
 }
 

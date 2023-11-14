@@ -4,16 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "LSH_LobbyGameModeBase.generated.h"
+#include "JE_SkillModeBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class JURASSICLAND_API ALSH_LobbyGameModeBase : public AGameModeBase
+class JURASSICLAND_API AJE_SkillModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-protected:
-	virtual void BeginPlay() override;
 };
