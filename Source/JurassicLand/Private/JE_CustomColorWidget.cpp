@@ -5,12 +5,16 @@
 #include "LSH_NetGameInstance.h"
 #include "Components/Button.h"
 #include "BlueTrex.h"
+#include "GameFramework/PlayerState.h"
+#include "JE_PlayerState.h"
+
+
 
 void UJE_CustomColorWidget::NativeConstruct()
 {
 	gi = GetGameInstance<ULSH_NetGameInstance>();
 	player = GetOwningPlayerPawn<ABlueTrex>();
-	
+	ps = GetOwningPlayerState<AJE_PlayerState>();
 
 	btn_red->OnClicked.AddDynamic(this, &UJE_CustomColorWidget::OnRedClicked);
 	btn_yellow->OnClicked.AddDynamic(this, &UJE_CustomColorWidget::OnYellowClicked);
@@ -43,7 +47,10 @@ void UJE_CustomColorWidget::OnYellowClicked()
 
 	}
 	
-	gi->playerCustomInfo.dinoColor = currentColor;
+	player->playerColor = currentColor;
+	//gi->playerCustomInfo.dinoColor = currentColor;
+	//ps->pCustomInfo.pColor = currentColor;
+	//ps->SetInstanceCustomInfo();
 	player->SetColor();
 }
 
@@ -66,7 +73,11 @@ void UJE_CustomColorWidget::OnBlueClicked()
 		player->IsColorCustom = false;
 
 	}
-	gi->playerCustomInfo.dinoColor = currentColor;
+	player->playerColor = currentColor;
+	//gi->playerCustomInfo.dinoColor = currentColor;
+	//ps->pCustomInfo.pColor = currentColor;
+	//ps->SetInstanceCustomInfo();
+
 	player->SetColor();
 
 }
@@ -90,8 +101,11 @@ void UJE_CustomColorWidget::OnGreenClicked()
 		player->IsColorCustom = false;
 
 	}
-	
-	gi->playerCustomInfo.dinoColor = currentColor;
+	player->playerColor = currentColor;
+	//gi->playerCustomInfo.dinoColor = currentColor;
+	//ps->pCustomInfo.pColor = currentColor;
+	//ps->SetInstanceCustomInfo();
+
 	player->SetColor();
 
 }
@@ -115,8 +129,10 @@ void UJE_CustomColorWidget::OnRedClicked()
 		player->IsColorCustom = false;
 
 	}
-	
-	gi->playerCustomInfo.dinoColor = currentColor;
+	player->playerColor = currentColor;
+	//gi->playerCustomInfo.dinoColor = currentColor;
+	//ps->pCustomInfo.pColor = currentColor;
+	//ps->SetInstanceCustomInfo();
 	player->SetColor();
 
 }

@@ -79,10 +79,11 @@ private:
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
     class UAnimationAsset* TailAttackAnim;
 
-
+/*---------------------------- 지은 ----------------------------*/
 public:
 	// hp - 지은
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Health")//HP동기화
+	//HP동기화
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Health")
 	bool bIsHpZero = false;	
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
@@ -90,11 +91,13 @@ public:
 
 	bool btickStop = false;
 
-/*---------------------------- 지은 ----------------------------*/
 // 플레이어 정보 : 닉네임, 메쉬, 컬러
 public:
 
 	class ULSH_NetGameInstance* gi;
+
+	UPROPERTY()	
+	class AJE_PlayerState* ps;
 	
 	// 닉네임 변수
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = Custom)
@@ -154,6 +157,11 @@ public:
 	bool IsColorCustom = false;
 
 public:
+	
+	// 클라이언트가 서버에 playerstate 요청하는 코드
+	UFUNCTION(Server, Reliable)
+	void ServerGetplayerState();
+	
 	//커스텀 아이템, 커스텀 컬러 및 플레이어 정보 실행 함수
 	UFUNCTION()
 	void InitializePlayer();
@@ -172,11 +180,11 @@ public:
 
 	// 플레이어 정보 설정 함수
 	UFUNCTION(Server, Reliable)
-	void ServerSetInitInfo(FPlayerCustomInfo initInfo);
+	void ServerSetInitInfo();
 
 	// 플레이어 커스텀 아이템 설정 함수
 	UFUNCTION(Server, Reliable)
-	void ServerSetCustomItemInfo(FPlayerCustomItemInfo customItemInfo);
+	void ServerSetCustomItemInfo();
 
 // 저장
 public:

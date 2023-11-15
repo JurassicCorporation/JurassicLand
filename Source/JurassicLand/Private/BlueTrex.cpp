@@ -29,8 +29,8 @@
 #include "JE_InBattleController.h"
 #include "JE_BattleWidget.h"
 #include "Raptor.h"
-
-
+#include "GameFramework/PlayerState.h"
+#include "JE_PlayerState.h"
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE(TRexTailAttack);
 
@@ -74,29 +74,8 @@ ABlueTrex::ABlueTrex()
 		IMC_TRex = tempIMC_TRex.Object;
 	}
 
-	
-// 	AttachToComponent(TRexEye,FAttachmentTransformRules::KeepRelativeTransform,TRexBody->GetSocketBoneName("bn_Head_10"));
-// }
-
-	/*---- Anim Import ----*/
-	/*ConstructorHelpers::FObjectFinder<UAnimationAsset> tempTailAttack(TEXT("/Script/Engine.AnimSequence'/Game/7_MISC/Animation/BlueTRex/BlueTRex_attack_tail_2.BlueTRex_attack_tail_2'"));
-	if (tempTailAttack.Succeeded())
-	{
-		TailAttackAnim = tempTailAttack.Object;
-	}*/
 
 	CharacterMovement = GetCharacterMovement();
-
-	// 닉네임
-	//nickComp = CreateDefaultSubobject<UJE_NicknameComponent>(TEXT("nickComp"));
-	/*nicknameText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("nicknameTEXT"));
-	nicknameText->SetupAttachment(GetMesh(), "NeckSocket");
-	nicknameText->SetRelativeLocation(FVector(-350, 0, 0));
-	nicknameText->SetRelativeRotation(FRotator(-180, 90, 90));
-	nicknameText->SetHorizontalAlignment(EHTA_Center);
-	nicknameText->SetWorldSize(100);
-	nicknameText->SetTextRenderColor(FColor::White);
-	nicknameText->SetVisibility(false);*/
 
 	//코인
 	currentCoin = initialCoin;
@@ -137,19 +116,38 @@ void ABlueTrex::BeginPlay()
 			SubSystem->AddMappingContext(IMC_TRex, 0);
 	}
 	
-	// 닉네임	
-	gi = GetGameInstance<ULSH_NetGameInstance>();
+	// 게임인스턴스에 플레이어 정보 불러오기
+	gi = GetGameInstance<ULSH_NetGameInstance>();	
+
+	// 스킬
+	ServerSetSkills(gi->playerSkillInfo);
 
 	if (GetController() != nullptr && GetController()->IsLocalPlayerController())
 	{
-		ServerSetInitInfo(gi->playerCustomInfo);
-		ServerSetCustomItemInfo(gi->playerCustomItemInfo);
-		ServerSetSkills(gi->playerSkillInfo);
+		if (HasAuthority())
+		{
+			// 플레이어 스테이트 불러오기
+			ps = GetController()->GetPlayerState<AJE_PlayerState>();
+
+			ServerSetInitInfo();
+			ServerSetCustomItemInfo();
+			//ServerSetSkills(gi->playerSkillInfo);
+
+			FTimerHandle initHandler;
+			GetWorldTimerManager().SetTimer(initHandler, this, &ABlueTrex::InitializePlayer, 3.0f, false);
+		}
+		else
+		{
+			ServerGetplayerState();
+		}
+			
+		
+		
 	}
 
 	// 캐릭터 초기화 지연 실행 // 1초는 너무 빠름
-	FTimerHandle initHandler;
-	GetWorldTimerManager().SetTimer(initHandler, this, &ABlueTrex::InitializePlayer, 3.0f, false);
+	//FTimerHandle initHandler;
+	//GetWorldTimerManager().SetTimer(initHandler, this, &ABlueTrex::InitializePlayer, 3.0f, false);
 
 }
 
@@ -255,70 +253,77 @@ void ABlueTrex::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifet
 
 }
 
+void ABlueTrex::ServerGetplayerState_Implementation()
+{
+	if (GetController() != nullptr)
+	{
+		if (AJE_PlayerState* clinetPS = GetController()->GetPlayerState<AJE_PlayerState>())
+		{
+			//ServerSetInitInfo();
+			//ServerSetCustomItemInfo();
+
+			playerName = clinetPS->pCustomInfo.pName;
+			playerColor = clinetPS->pCustomInfo.pColor;
+			playerMeshNumber = clinetPS->pCustomInfo.pMeshNum;
+
+			playerHat = clinetPS->pCustomItemInfo.pHatName;
+			playerGlasses = clinetPS->pCustomItemInfo.pGlassesName;
+			playerShoes = clinetPS->pCustomItemInfo.pShoesName;
+
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("Client"));
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Emerald, clinetPS->pCustomInfo.pColor.ToString());
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Emerald, clinetPS->pCustomItemInfo.pHatName.ToString());
+
+			FTimerHandle initHandler;
+			GetWorldTimerManager().SetTimer(initHandler, this, &ABlueTrex::InitializePlayer, 3.0f, false);
+		}
+	}
+}
+
+// 초기 설정 함수
 void ABlueTrex::InitializePlayer()
 {
-	// 닉네임 설정
-	//if (nicknameText)
-	//{
-	//	nicknameText->SetText(FText::FromString(playerName));
-	//}
+
 	if (gi->playerCustomInfo.dinoMeshNum != 1)
 	{
+		// 게임인스턴스에 커스텀 정보 불러오기
 		InitialCustomMulti();
 
+		// 커스텀 컬러 설정
+		//ServerSetInitInfo();
 		CustomColor();
+
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, TEXT("Initial"));
 	}
 	
-
-	//ServerSetSkills(gi->playerSkillInfo);
-
 }
 
 void ABlueTrex::InitialCustomMulti_Implementation()
 {
-	ServerSetCustomItemInfo(gi->playerCustomItemInfo);
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Initialize"));
+	// 게임인스턴스에 커스텀 아이템 정보 불러오기
+	//ServerSetCustomItemInfo();
 }
 
 void ABlueTrex::SetColor()
 {
-	ServerSetInitInfo(gi->playerCustomInfo);
+	//playerColor = gi->playerCustomInfo.dinoColor;
+	// 게임인스턴스에 커스텀 정보 불러오기
+	//ServerSetInitInfo();
 
+	// 불러온 정보로 컬러 설정
 	CustomColor();
-
-	//// 컬러 설정
-	//if (IsColorCustom)
-	//{
-	//	if (!IsColor)
-	//	{	
-	//		dynamicMat1 = UMaterialInstanceDynamic::Create(CustomMat, this);
-	//		GetMesh()->SetMaterial(0, dynamicMat1);
-	//	}
-	//}
-	//else
-	//{
-	//	if (gi->IsColorChanged) currMat = CustomMat;
-	//	else currMat = InitialMat;
-
-	//	dynamicMat1 = UMaterialInstanceDynamic::Create(currMat, this);
-
-	//	GetMesh()->SetMaterial(0, dynamicMat1);
-
-	//}
-	//	
-
-	//dynamicMat1->SetVectorParameterValue(FName("MyColor"), playerColor);
 }
 
 void ABlueTrex::SetMesh()
 {
-	ServerSetInitInfo(gi->playerCustomInfo);
+	ServerSetInitInfo();
 
 	CustomMesh();
 }
 
 void ABlueTrex::CustomColor()
 {
+	
 	// 컬러 설정
 	if (IsColorCustom)
 	{
@@ -415,24 +420,23 @@ void ABlueTrex::getSkillCool()
  	}
 }
 
-void ABlueTrex::ServerSetInitInfo_Implementation(FPlayerCustomInfo initInfo)
+void ABlueTrex::ServerSetInitInfo_Implementation()
 {
-
-	playerName = initInfo.dinoName;
-	playerMeshNumber = initInfo.dinoMeshNum;
-	playerColor = initInfo.dinoColor;
-
+	playerName = ps->pCustomInfo.pName;
+	playerColor = ps->pCustomInfo.pColor;
+	playerMeshNumber = ps->pCustomInfo.pMeshNum;
 
 }
 
-void ABlueTrex::ServerSetCustomItemInfo_Implementation(FPlayerCustomItemInfo customItemInfo)
+void ABlueTrex::ServerSetCustomItemInfo_Implementation()
 {
-	playerHat = customItemInfo.HatTagInstance;
-	playerGlasses = customItemInfo.GlassesTagInstance;
-	playerShoes = customItemInfo.ShoesTagInstance;
+	playerHat = ps->pCustomItemInfo.pHatName;
+	playerGlasses = ps->pCustomItemInfo.pGlassesName;
+	playerShoes = ps->pCustomItemInfo.pShoesName;
 
 }
 
+// 현재 플레이어의 커스텀 아이템 가져오기
 void ABlueTrex::GetCustomItemData()
 {
 	TArray<AJE_CustomItemActor*> allItem;
@@ -475,7 +479,7 @@ void ABlueTrex::GetCustomItemData()
 		}
 	}
 
-	for (TActorIterator<AJE_CustomItemActor> Itr(GetWorld()); Itr; ++Itr)
+	/*for (TActorIterator<AJE_CustomItemActor> Itr(GetWorld()); Itr; ++Itr)
 	{
 		AJE_CustomItemActor* currActor = *Itr;
 
@@ -495,7 +499,11 @@ void ABlueTrex::GetCustomItemData()
 		{
 			continue;
 		}
-	}
+	}*/
+
+	/*ps->pCustomItemInfo.pHatName = HatTag;
+	ps->pCustomItemInfo.pGlassesName = GlassesTag;
+	ps->pCustomItemInfo.pShoesName = ShoesTag;*/
 
 	gi->playerCustomItemInfo.HatTagInstance = HatTag;
 	gi->playerCustomItemInfo.GlassesTagInstance = GlassesTag;
@@ -505,14 +513,22 @@ void ABlueTrex::GetCustomItemData()
 
 void ABlueTrex::SaveCustomItemData()
 {
+	// 현재 플레이어의 커스텀 아이템 가져오기
 	GetCustomItemData();
+
+// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, ps->pCustomItemInfo.pHatName.ToString());
+// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, ps->pCustomItemInfo.pGlassesName.ToString());
+// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, ps->pCustomItemInfo.pShoesName.ToString());
+
+	// 플레이트 스테이트 커스텀 아이템 게임 인스턴스에 함수
+	//ps->SetInstanceCustomItemInfo();
 
 	MySaveGame = Cast<UJE_SaveGame>(UGameplayStatics::CreateSaveGameObject(UJE_SaveGame::StaticClass()));
 
-	// 장신구 블루프린트 액터 savegame에 저장
-	MySaveGame->myHat = currentHat;
-	MySaveGame->myGlasses = currentGlasses;
-	MySaveGame->myShoes = currentShoes;
+	//// 장신구 블루프린트 액터 savegame에 저장
+	//MySaveGame->myHat = currentHat;
+	//MySaveGame->myGlasses = currentGlasses;
+	//MySaveGame->myShoes = currentShoes;
 
 	// 장신구 블루프린트 액터 태그 savegame에 저장
 	MySaveGame->myHatTag = HatTag;
@@ -528,38 +544,37 @@ void ABlueTrex::LoadCustomItemData()
 {
 	MySaveGame = Cast<UJE_SaveGame>(UGameplayStatics::LoadGameFromSlot("MyCustomSaveSlot", 0));
 
+	//if (MySaveGame == nullptr)
+	//{
+	//	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Nothing"));
+	//	return;
+	//}
+	//else
+	//{
+	//	if (MySaveGame->myHatTag.IsValid())
+	//	{
+	//		/*FString Message = FString::Printf(TEXT("%s"), *MySaveGame->myHat->GetName());
+	//		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Message);*/
 
-	if (MySaveGame == nullptr)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Nothing"));
-		return;
-	}
-	else
-	{
-		if (MySaveGame->myHatTag.IsValid())
-		{
-			/*FString Message = FString::Printf(TEXT("%s"), *MySaveGame->myHat->GetName());
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Message);*/
+	//		//FString Message1 = FString("Hat : ") + gi->playerCustomItemInfo.HatTagInstance.ToString();
+	//		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Message1);
 
-			//FString Message1 = FString("Hat : ") + gi->playerCustomItemInfo.HatTagInstance.ToString();
-			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Message1);
+	//	}
 
-		}
+	//	if (MySaveGame->myGlassesTag.IsValid())
+	//	{
+	//		//FString Message1 = FString("Glasses : ") + gi->playerCustomItemInfo.GlassesTagInstance.ToString();
+	//		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Message1);
 
-		if (MySaveGame->myGlassesTag.IsValid())
-		{
-			//FString Message1 = FString("Glasses : ") + gi->playerCustomItemInfo.GlassesTagInstance.ToString();
-			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Message1);
+	//	}
 
-		}
+	//	if (MySaveGame->myShoesTag.IsValid())
+	//	{
+	//		//FString Message1 = FString("Shoes : ") + gi->playerCustomItemInfo.ShoesTagInstance.ToString();
+	//		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Message1);
 
-		if (MySaveGame->myShoesTag.IsValid())
-		{
-			//FString Message1 = FString("Shoes : ") + gi->playerCustomItemInfo.ShoesTagInstance.ToString();
-			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Message1);
+	//	}
 
-		}
-
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Load"));
-	}
+	//	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Load"));
+	//}
 }

@@ -73,7 +73,6 @@ class JURASSICLAND_API ULSH_NetGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
-
 public:
 	ULSH_NetGameInstance();
 
