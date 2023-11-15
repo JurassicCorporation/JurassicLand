@@ -83,7 +83,8 @@ void UJE_BattleWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 			ws_Battle->SetActiveWidgetIndex(3);
 			txt_battleresult->SetText(FText::FromString("Lose"));
 			GetWorld()->GetTimerManager().SetTimer(CoinHandler, this, &UJE_BattleWidget::CoinUI, 3.0f, false);
-
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Lose")));
+			
 			ischange = true;
 
 		}
@@ -93,7 +94,7 @@ void UJE_BattleWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 			txt_battleresult->SetText(FText::FromString("Win"));
 			player->currentCoin += 5000.f;
 			GetWorld()->GetTimerManager().SetTimer(CoinHandler, this, &UJE_BattleWidget::CoinUI, 3.0f, false);
-
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Win")));
 			ischange = true;
 
 		}
@@ -129,7 +130,8 @@ void UJE_BattleWidget::CoinUI()
 	bisMouse = true;
 
 	APlayerController* pc = GetWorld()->GetFirstPlayerController();
-	FInputModeGameAndUI InputModeData;
+
+	FInputModeUIOnly InputModeData;
 
 	pc->SetInputMode(InputModeData);
 
@@ -147,6 +149,8 @@ void UJE_BattleWidget::OnClickedToMain()
 {
 	//FString LevelName = TEXT("MainMap");
 	//UGameplayStatics::OpenLevel(GetWorld(), FName(*LevelName));
+
+	//ws_Battle->SetActiveWidgetIndex(0);
 
 	FString mapAdress = "/Game/1_Level/MainMap";
 	bool travelResult = GetWorld()->ServerTravel(mapAdress + "?Listen", true);

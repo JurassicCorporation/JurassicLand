@@ -124,6 +124,6 @@ public:
 	void OnTravlebattleMap();//게임 시작버튼 눌렀을 때 서버트래블
 
 public:
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	bool isEnd = false;
 };
