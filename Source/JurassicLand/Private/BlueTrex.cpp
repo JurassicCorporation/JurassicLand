@@ -198,6 +198,7 @@ void ABlueTrex::TRexMove(const FInputActionValue& Val)
 	FRotator CurrControlRotation = GetControlRotation();
 	AddMovementInput(UKismetMathLibrary::GetRightVector(FRotator(0.0f, CurrControlRotation.Yaw, CurrControlRotation.Roll)), valX);
 	AddMovementInput(UKismetMathLibrary::GetForwardVector(FRotator(0.0f, CurrControlRotation.Yaw, 0.0f)), valY);
+
 	
 
 }
@@ -221,7 +222,7 @@ void ABlueTrex::TRexTailAttack_Implementation(const FInputActionValue& Val)
 		
 		TailAttack = true;
 		GetCharacterMovement()->MaxWalkSpeed = 0.f;
-		this->bUseControllerRotationYaw = false;
+		this->bUseControllerRotationYaw = true;
 		
 	}
 }
