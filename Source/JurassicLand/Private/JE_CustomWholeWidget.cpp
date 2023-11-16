@@ -7,6 +7,9 @@
 #include "Components/Button.h"
 #include "BlueTrex.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerState.h"
+#include "JE_PlayerState.h"
+
 
 
 void UJE_CustomWholeWidget::NativeConstruct()
@@ -15,6 +18,7 @@ void UJE_CustomWholeWidget::NativeConstruct()
 
 	gi = GetGameInstance<ULSH_NetGameInstance>();
 	player = GetOwningPlayerPawn<ABlueTrex>();
+	//ps = GetOwningPlayerState<AJE_PlayerState>();
 
 	btn_load->OnClicked.AddDynamic(this, &UJE_CustomWholeWidget::OnClickedLoad);
 	btn_save->OnClicked.AddDynamic(this, &UJE_CustomWholeWidget::OnClickedSave);
@@ -34,6 +38,11 @@ void UJE_CustomWholeWidget::OnClickedLoad()
 void UJE_CustomWholeWidget::OnClickedSave()
 {
 	player->SaveCustomItemData();
+	gi->playerCustomInfo.dinoColor = player->playerColor;
+	//ps->SetInstanceCustomInfo();
+	//ps->SetInstanceCustomItemInfo(gi->playerCustomItemInfo);
+
+	
 
 }
 

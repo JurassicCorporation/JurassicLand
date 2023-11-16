@@ -80,12 +80,6 @@ public:
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = MySettings)
 	TArray<UProgressBar*> pbArr;
 
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = MySettings)
-	class UImage* img_player_win;
-
-	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = MySettings)
-	class UImage* img_player_lose;
-
 	UPROPERTY(VisibleAnywhere, Transient, meta = (BindWidgetAnim), Category = MySettings)
 	class UWidgetAnimation* startText;
 

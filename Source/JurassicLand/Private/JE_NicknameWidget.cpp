@@ -12,6 +12,7 @@ void UJE_NicknameWidget::NativeConstruct()
 	gi = Cast<ULSH_NetGameInstance>(GetGameInstance());
 
 	txt_playerName->SetText(FText::FromString(gi->myName));
+	txt_playerName->SetText(FText::FromString(gi->playerCustomInfo.dinoName));
 }
 
 void UJE_NicknameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

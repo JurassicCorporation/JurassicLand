@@ -11,7 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "LSH_NetGameInstance.h"
 #include "BlueTrex.h"
-
+#include "GameFramework/PlayerState.h"
 
 
 void UJE_GameStartWidget::NativeConstruct()

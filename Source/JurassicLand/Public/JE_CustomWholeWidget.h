@@ -22,6 +22,7 @@ public:
 
 	class ULSH_NetGameInstance* gi;
 	class ABlueTrex* player;
+	class AJE_PlayerState* ps;
 
 
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget), Category = MySettings)

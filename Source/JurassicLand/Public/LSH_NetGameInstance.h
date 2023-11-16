@@ -73,7 +73,6 @@ class JURASSICLAND_API ULSH_NetGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
-
 public:
 	ULSH_NetGameInstance();
 
@@ -124,6 +123,6 @@ public:
 	void OnTravlebattleMap();//게임 시작버튼 눌렀을 때 서버트래블
 
 public:
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	bool isEnd = false;
 };
