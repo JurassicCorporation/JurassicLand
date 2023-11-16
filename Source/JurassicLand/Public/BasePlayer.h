@@ -48,8 +48,8 @@ public:
 	class UCapsuleComponent* PlayerHeadCollision;
 	
 	//Collision_ UpperBody
-	UPROPERTY(EditAnywhere, Category = CharacterSettings, BlueprintReadWrite)
-	class UCapsuleComponent* PlayerUpperBodyCollision;
+	//UPROPERTY(EditAnywhere, Category = CharacterSettings, BlueprintReadWrite)
+	//class UCapsuleComponent* PlayerUpperBodyCollision;
 	
 	//Collision_ Tail
 	UPROPERTY(EditAnywhere, Category = CharacterSettings, BlueprintReadWrite)

@@ -75,8 +75,8 @@ ABasePlayer::ABasePlayer()
 	/*AttachToComponent(PlayerBody,FAttachmentTransformRules::KeepRelativeTransform, TEXT("bn_Head_10"));*/
 
 	//collision_Upper Body
-	PlayerUpperBodyCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("PlayerUpperCollision"));
-	PlayerUpperBodyCollision->SetupAttachment(RootComponent);
+	/*PlayerUpperBodyCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("PlayerUpperCollision"));
+	PlayerUpperBodyCollision->SetupAttachment(RootComponent);*/
 	/*AttachToComponent(PlayerBody, FAttachmentTransformRules::KeepRelativeTransform, TEXT("bn_Neck_7"));*/
 
 	//collision_Tail
